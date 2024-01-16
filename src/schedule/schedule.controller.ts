@@ -6,7 +6,7 @@ export class ScheduleController {
     constructor(private scheduleService: ScheduleService) {}
 
     @Post('/')
-    createWork() {
+    createEvent() {
         
     }
 }
