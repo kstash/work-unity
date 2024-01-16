@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { CompanyRepository } from './company.repository';
-import { Company } from './company.entity';
-import { TeamRepository } from './team.repository';
+import { CompanyRepository } from './repository/company.repository';
+import { Company } from './entity/company.entity';
+import { TeamRepository } from './repository/team.repository';
 import { CreateTeamDto } from './dto/create-team.dto';
-import { Team } from './team.entity';
+import { Team } from './entity/team.entity';
 
 @Injectable()
 export class GroupService {
@@ -13,11 +13,19 @@ export class GroupService {
         private readonly teamRepository: TeamRepository,
     ) {}
 
-    async createCompany(createCompanyDto: CreateCompanyDto): Promise<Company> {
-        return this.companyRepository.createCompany(createCompanyDto);
+    async createCompany(createDto: CreateCompanyDto): Promise<Company> {
+        return this.companyRepository.createCompany(createDto);
     }
 
-    async createTeam(createTeamDto: CreateTeamDto): Promise<Team> {
-        return this.teamRepository.createTeam(createTeamDto);
+    async getCompany(id: number): Promise<Company> {
+        return this.companyRepository.findOneByOrFail({ id });
+    }
+
+    async createTeam(createDto: CreateTeamDto): Promise<Team> {
+        return this.teamRepository.createTeam(createDto);
+    }
+
+    async getCompanyTeamList(company: Company): Promise<Team[]> {
+        return this.teamRepository.findBy({ company: { id: company.id } });
     }
 }

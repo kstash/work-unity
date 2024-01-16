@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
-import { Team } from "./team.entity";
-import { CreateTeamDto } from "./dto/create-team.dto";
+import { Team } from "../entity/team.entity";
+import { CreateTeamDto } from "../dto/create-team.dto";
 
 @Injectable()
 export class TeamRepository extends Repository<Team> {
@@ -9,8 +9,8 @@ export class TeamRepository extends Repository<Team> {
         super(Team, dataSoruce.createEntityManager());
     }
 
-    async createTeam(createTeamDto: CreateTeamDto): Promise<Team> {
-        const team = this.create(createTeamDto);
+    async createTeam(createDto: CreateTeamDto): Promise<Team> {
+        const team = this.create(createDto);
         try {
             const result = await this.save(team);
             return result;

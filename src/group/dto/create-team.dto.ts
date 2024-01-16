@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber } from "class-validator";
-import { Company } from "../company.entity";
+import { Company } from "../entity/company.entity";
 import { User } from "src/user/enitity/user.entity";
 
 export class CreateTeamDto {

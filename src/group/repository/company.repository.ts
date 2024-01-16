@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
-import { Company } from "./company.entity";
-import { CreateCompanyDto } from "./dto/create-company.dto";
+import { Company } from "../entity/company.entity";
+import { CreateCompanyDto } from "../dto/create-company.dto";
 
 @Injectable()
 export class CompanyRepository extends Repository<Company> {
@@ -9,9 +9,9 @@ export class CompanyRepository extends Repository<Company> {
         super(Company, dataSoruce.createEntityManager());
     }
 
-    async createCompany(createCompanyDto: CreateCompanyDto): Promise<any> {
-        const company = this.create(createCompanyDto);
+    async createCompany(createDto: CreateCompanyDto): Promise<any> {
         try {
+            const company = this.create(createDto);
             const result = await this.save(company);
             return result;
         } catch (error) {
