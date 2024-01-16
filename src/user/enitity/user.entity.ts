@@ -1,71 +1,33 @@
-import { Company } from "src/group/company.entity";
-import { Team } from "src/group/team.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Account } from "./account.entity";
 
-export enum UserTypeEnum {
-    ADMIN = 'admin',
-    MANAGER = 'manager',
-    USER = 'user'
-}
-
-export enum GenderEnum {
+export enum Gender {
     MALE = 'male',
-    FEMALE = 'female'
+    FEMALE = 'female',
 }
 
-@Entity()
-@Unique(['username'])
+@Entity('user')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    username: string;
- 
-    @Column() 
-    password: string;
+    @OneToMany(() => Account, (account) => account.user)
+    accounts: Account[];
 
-    // admin인 경우 null
-    @ManyToOne(() => Company, (company) => company.users, { eager: false })
-    company: Company;
-
-    // admin인 경우 null
-    @ManyToMany(() => Team, (teams) => teams.users, { eager: false })
-    teams: Team[];
-
-    @Column()
-    type: UserTypeEnum;
-
-    @Column()
-    name: string;
-
-    @Column({ nullable: true })
-    gender: GenderEnum;
-
+    @Column({ unique: true })
+    phone: string;
     @Column()
     email: string;
 
     @Column()
-    phone: string;
-
+    name: string;
+    @Column({ type: 'enum', enum: Gender, nullable: true })
+    gender?: Gender;
     @Column()
-    birth: string;
+    birth: Date;
 
-    @Column({ nullable: true })
-    address: string;
-
-    @Column({ nullable: true })
-    resposibility: string;
-
-    @Column({ nullable: true })
-    position: string;
-
-    @Column({ nullable: true })
-    rank: string;
-
-    @CreateDateColumn({ type: 'timestamp'})
+    @CreateDateColumn()
     createdAt: Date;
-
-    @UpdateDateColumn({ type: 'timestamp'})
+    @UpdateDateColumn()
     updatedAt: Date;
 }

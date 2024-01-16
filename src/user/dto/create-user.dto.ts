@@ -1,27 +1,17 @@
-import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { GenderEnum, UserTypeEnum } from "../enitity/user.entity";
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from "class-validator";
+import { Gender } from "../enitity/user.entity";
 
 export class CreateUserDto {
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'name is required' })
     @IsString()
     name: string;
-
-    type = UserTypeEnum.USER;
-
-    @IsEnum(GenderEnum)
-    gender: GenderEnum;
-
+    @IsOptional()
+    @IsEnum(Gender)
+    gender?: Gender;
+    @IsDateString({ strict: true }, { message: 'birth must be a valid date' })
+    birth: Date;
     @IsEmail()
     email: string;
-
-    @IsDateString()
-    birth: Date;
-
-    address: string;
-
-    responsibility: string;
-
-    position: string;
-
-    rank: string;
+    @IsPhoneNumber('KR')
+    phone: string;
 }
