@@ -1,4 +1,4 @@
-name: Build Nest.js Backend Server
+name: Build Server Image
 
 on:
   push:

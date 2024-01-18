@@ -1,4 +1,4 @@
-name: Build & Deploy Nest.js Backend Server to Amazon ECS (Client can be deployed if client's main branch was updated)
+name: Build & Deploy Server Image
 
 on:
   push:
