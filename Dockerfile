@@ -1,4 +1,4 @@
-FROM --platform=arm64/v8 node:16-alpine AS builder
+FROM node:16-alpine AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY . .
 RUN npm install --only=production && npm run build
 
 # production image
-FROM --platform=arm64/v8 node:16-alpine AS runner
+FROM node:16-alpine AS runner
 
 WORKDIR /app
 
