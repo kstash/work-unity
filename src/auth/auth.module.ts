@@ -13,17 +13,14 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { UserModule } from 'src/user/user.module';
 
 const jwtConfig = config.get('jwt');
+const secret: string = process.env.JWT_SECRET || jwtConfig.secret;
+const expiresIn: number = Number(process.env.JWT_EXPIRES_IN) || jwtConfig.expiresIn;
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Account, User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || jwtConfig.secret,
-      signOptions: {
-        expiresIn: jwtConfig.expiresIn,
-      },
-    }),
+    JwtModule.register({ secret, signOptions: { expiresIn } }),
     UserModule,
   ],
   controllers: [AuthController],

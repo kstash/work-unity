@@ -18,18 +18,15 @@ import { JwtModule } from '@nestjs/jwt';
 import * as config from 'config';
 
 const jwtConfig = config.get('jwt');
+const secret: string = process.env.JWT_SECRET || jwtConfig.secret;
+const expiresIn: number = Number(process.env.JWT_EXPIRES_IN) || jwtConfig.expiresIn;
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Address, Leave, Salary, User]),
         forwardRef(() => AuthModule),
         // forwardRef(() => )
-        JwtModule.register({
-            secret: process.env.JWT_SECRET || jwtConfig.secret,
-            signOptions: {
-              expiresIn: jwtConfig.expiresIn,
-            },
-          })
+        JwtModule.register({ secret, signOptions: { expiresIn } })
     ],
     controllers: [UserController],
     providers: [
