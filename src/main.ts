@@ -7,7 +7,7 @@ import { setupSwagger } from './util/swagger';
 
 async function bootstrap() {
   // env
-  process.env = configDotenv().parsed;
+  configDotenv();
 
   initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
@@ -16,8 +16,8 @@ async function bootstrap() {
   // swagger
   setupSwagger(app);
   await app.listen(port);
-  
-  const url = await app.getUrl()
+
+  const url = await app.getUrl();
   Logger.log(`Application is running on: ${url}`);
 }
 bootstrap();
