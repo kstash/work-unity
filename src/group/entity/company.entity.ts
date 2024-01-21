@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique }
 import { Team } from "./team.entity";
 import { Position } from "./position.entity";
 import { Title } from "./title.entity";
-import { Account } from "src/user/enitity/account.entity";
+import { ComAccount } from "src/user/enitity/comAccount.entity";
 
 @Entity()
 export class Company extends BaseEntity {
@@ -19,8 +19,8 @@ export class Company extends BaseEntity {
     @Column()
     traderReg: string
 
-    @OneToMany(() => Account, account => account.company, { eager: true })
-    accounts: Account[];
+    @OneToMany(() => ComAccount, comAccount => comAccount.company, { eager: true })
+    comAccounts: ComAccount[];
     @OneToMany(() => Team, team => team.company, { eager: true })
     teams: Team[];
     @OneToMany(() => Position, position => position.company, { eager: true })

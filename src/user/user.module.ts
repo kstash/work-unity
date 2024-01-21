@@ -15,18 +15,24 @@ import { Salary } from './enitity/salary.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import * as config from 'config';
-
-const jwtConfig = config.get('jwt');
-const secret: string = process.env.JWT_SECRET || jwtConfig.secret;
-const expiresIn: number = Number(process.env.JWT_EXPIRES_IN) || jwtConfig.expiresIn;
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CompanyRepository } from 'src/group/repository/company.repository';
+import { ComAccountRepository } from './repository/comAccount.repository';
+import { ComAccount } from './enitity/comAccount.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Address, Leave, Salary, User]),
+        TypeOrmModule.forFeature([Account, Address, Leave, Salary, User, ComAccount]),
         forwardRef(() => AuthModule),
         // forwardRef(() => )
-        JwtModule.register({ secret, signOptions: { expiresIn } })
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (configService: ConfigService) => ({
+                secret: configService.get('JWT_SECRET'),
+                signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
+            })
+        })
     ],
     controllers: [UserController],
     providers: [
@@ -34,6 +40,8 @@ const expiresIn: number = Number(process.env.JWT_EXPIRES_IN) || jwtConfig.expire
         UserService,
         AccountRepository,
         AddressRepository,
+        CompanyRepository,
+        ComAccountRepository,
         LeaveRepository,
         SalaryRepository,
         UserRepository

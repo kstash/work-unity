@@ -22,4 +22,9 @@ export class CompanyRepository extends Repository<Company> {
             }
         }
     }
+
+    async findByBusinessReg(businessReg: string): Promise<Company> {
+        const result = await this.findOneBy({ businessReg });
+        return result;
+    }
 }

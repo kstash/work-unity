@@ -1,6 +1,7 @@
 import { Account } from "src/user/enitity/account.entity";
 import { Approval } from "./approval.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ComAccount } from "src/user/enitity/comAccount.entity";
 
 export enum EventType {
     WORK = 'work',
@@ -12,7 +13,7 @@ export enum EventType {
 export class Event extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-    @Column()
+    @Column({ type: 'enum', enum: EventType })
     type: EventType;
     @Column({ nullable: true })
     total: number;
@@ -21,8 +22,8 @@ export class Event extends BaseEntity {
     @Column({ nullable: true })
     finishedAt: Date;
 
-    @ManyToOne(() => Account, account => account.events, { onDelete: 'CASCADE' })
-    account: Account;
+    @ManyToOne(() => ComAccount, comAccount => comAccount.events, { onDelete: 'CASCADE' })
+    createdBy: ComAccount;
 
     @OneToMany(() => Approval, approval => approval.event)
     approvals: Approval[];

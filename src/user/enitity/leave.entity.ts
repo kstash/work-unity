@@ -1,5 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Account } from "./account.entity";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ComAccount } from "./comAccount.entity";
 
 export enum LeaveType {
     ANNUAL = 'annual',              // 연차 휴가 (일반)
@@ -18,7 +18,7 @@ export enum LeaveType {
 export class Leave extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-    @Column()
+    @Column({ type: 'enum', enum: LeaveType })
     type: LeaveType;
     @Column()
     startedAt: Date;
@@ -27,8 +27,8 @@ export class Leave extends BaseEntity {
     @Column()
     total: number;
 
-    @ManyToOne(() => Account, account => account.leaves, { onDelete: 'CASCADE' })
-    account: Account;
+    @ManyToOne(() => ComAccount, comAccount => comAccount.leaves)
+    comAccount: ComAccount;
 
     @CreateDateColumn()
     createdAt: Date;

@@ -12,13 +12,13 @@ export class UserRepository extends Repository<User> {
     async createUser(dto: CreateUserDto): Promise<User> {
         const user = this.create(dto);
         try {
-            const result = this.save(user);
+            const result = await this.save(user);
             return result;
         } catch (error) {
             if (error.code === '23505') {
                 throw new ConflictException('User already exists');
             } else {
-                throw new InternalServerErrorException();
+                throw new InternalServerErrorException(error);
             }
         }
     }
@@ -34,5 +34,10 @@ export class UserRepository extends Repository<User> {
                 throw new InternalServerErrorException();
             }
         }
+    }
+
+    async findByPhone(phone: string) {
+        const result = await this.findOneBy({ phone });
+        return result;
     }
 }

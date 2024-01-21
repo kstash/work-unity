@@ -4,8 +4,8 @@ import { AccountRepository } from './repository/account.repository';
 import { AddressRepository } from './repository/address.repsotiroy';
 import { LeaveRepository } from './repository/leave.repository';
 import { SalaryRepository } from './repository/salary.repository';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './enitity/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -17,10 +17,9 @@ export class UserService {
         private readonly userRepository: UserRepository,
     ) {}
 
-    async createUser(createDto: CreateUserDto): Promise<User> {
-        const { phone } = createDto;
-        const user = await this.userRepository.findOneBy({ phone }) || await this.userRepository.create(createDto);
+    async createUser(dto: CreateUserDto): Promise<User> {
         try {
+            const user = this.userRepository.create(dto);
             const result = await this.userRepository.save(user);
             return result;
         } catch (error) {

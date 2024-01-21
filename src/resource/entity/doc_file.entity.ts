@@ -6,8 +6,8 @@ import { File } from "./file.entity";
 export class DocFile extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-    @ManyToOne(() => Doc, doc => doc.id, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Doc, doc => doc.id)
     doc: Doc;
-    @ManyToOne(() => File, file => file.id, { onDelete: 'CASCADE' })
+    @ManyToOne(() => File, file => file.id)
     file: File;
 }

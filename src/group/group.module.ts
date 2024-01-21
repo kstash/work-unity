@@ -14,6 +14,6 @@ import { TeamRepository } from './repository/team.repository';
   ],
   controllers: [GroupController],
   providers: [GroupService, CompanyRepository, TeamRepository],
-  exports: [GroupService],
+  exports: [GroupService, CompanyRepository, TeamRepository],
 })
 export class GroupModule {}

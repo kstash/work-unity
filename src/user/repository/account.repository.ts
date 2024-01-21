@@ -2,8 +2,8 @@ import { ConflictException, Injectable, InternalServerErrorException, NotFoundEx
 import { DataSource, Repository } from "typeorm";
 import * as bcrypt from 'bcryptjs';
 import { Account } from "../enitity/account.entity";
-import { CreateAccountDto } from "../dto/create-account.dto";
 import { User } from "../enitity/user.entity";
+import { CreateAccountDto } from "../dto/create-account.dto";
 
 @Injectable()
 export class AccountRepository extends Repository<Account> {
@@ -11,11 +11,11 @@ export class AccountRepository extends Repository<Account> {
         super(Account, dataSource.createEntityManager());
     }
 
-    async createAccount(createAccountDto: CreateAccountDto): Promise<Account> {
+    async createAccount(dto: CreateAccountDto): Promise<Account> {
         const salt = await bcrypt.genSalt()
-        createAccountDto.password = await bcrypt.hash(createAccountDto.password, salt)
-        const account = this.create(createAccountDto)
+        dto.password = await bcrypt.hash(dto.password, salt)
         try {
+            const account = this.create(dto)
             const result = this.save(account)
             return result
         } catch (error) {

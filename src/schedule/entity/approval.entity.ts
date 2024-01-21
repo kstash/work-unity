@@ -1,6 +1,7 @@
 import { Account } from "src/user/enitity/account.entity";
 import { Event } from "src/schedule/entity/event.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ComAccount } from "src/user/enitity/comAccount.entity";
 
 export enum ApprovalType {
     WAITING = 'waiting',    // 대기중
@@ -14,18 +15,18 @@ export enum ApprovalType {
 export class Approval extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-    @Column()
+    @Column({ type: 'enum', enum: ApprovalType, default: ApprovalType.WAITING })
     type: ApprovalType;
     @Column()
     order: number;
     @Column({ default: null })
     message: string;
 
-    @ManyToOne(() => Event, (event) => event.approvals, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Event, event => event.approvals, { onDelete: 'CASCADE' })
     event: Event;
-    @ManyToOne(() => Account, (account) => account.approvals, { onDelete: 'CASCADE' })
-    account: Account;
-    
+    @ManyToOne(() => ComAccount, comAccount => comAccount.approvals, { onDelete: 'CASCADE' })
+    approveBy: ComAccount;
+
     @CreateDateColumn()
     createdAt: Date;
     @UpdateDateColumn()

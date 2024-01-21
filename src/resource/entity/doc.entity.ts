@@ -1,4 +1,4 @@
-import { Account } from "src/user/enitity/account.entity";
+import { ComAccount } from "src/user/enitity/comAccount.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('document')
@@ -10,10 +10,10 @@ export class Doc extends BaseEntity {
     @Column()
     content: string;
 
-    @ManyToOne(() => Account, (account) => account.createdDocs)
-    createdBy: Account;
-    @ManyToOne(() => Account, (account) => account.updatedDocs)
-    updatedBy: Account;
+    @ManyToOne(() => ComAccount, (comAccount) => comAccount.createdDocs)
+    createdBy: ComAccount;
+    @ManyToOne(() => ComAccount, (comAccount) => comAccount.updatedDocs)
+    updatedBy: ComAccount;
 
     @CreateDateColumn()
     createdAt: Date;

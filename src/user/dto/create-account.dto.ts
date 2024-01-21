@@ -1,14 +1,12 @@
-import { AccountType } from "../enitity/account.entity";
-import { IsEnum, IsNotEmptyObject, ValidateNested } from "class-validator";
-import { Optional } from "@nestjs/common";
-import { User } from "../enitity/user.entity";
-import { SignInDto } from "src/auth/dto/sign-in.dto";
+import { faker } from "@faker-js/faker";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateAccountDto extends SignInDto {
-    @IsNotEmptyObject()
-    @ValidateNested()
-    user: User;
-    @Optional()
-    @IsEnum(AccountType, { message: 'type is not valid' })
-    type?: AccountType;
+export class CreateAccountDto {
+    @ApiProperty({ description: '계정 ID', example: faker.internet.userName() })
+    accountName!: string;
+    @ApiProperty({ description: '계정 비밀번호', example: faker.internet.password() })
+    password!: string;
+
+    @ApiProperty({ description: '메일', example: faker.internet.email() })
+    email?: string;
 }

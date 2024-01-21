@@ -1,21 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import * as config from 'config';
-import { SwaggerModule } from '@nestjs/swagger';
 import { StorageDriver, initializeTransactionalContext } from 'typeorm-transactional';
+import { configDotenv } from 'dotenv';
+import { setupSwagger } from './util/swagger';
 
 async function bootstrap() {
+  // env
+  process.env = configDotenv().parsed;
+
   initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
   const app = await NestFactory.create(AppModule);
-  const serverConfig = config.get('server');
-  const port = Number(process.env.APP_PORT) || serverConfig.port;
-
+  const port = Number(process.env.APP_PORT);
   // swagger
-  const document = SwaggerModule.createDocument(app, port);
-  SwaggerModule.setup('api', app, document);
-  
+  setupSwagger(app);
   await app.listen(port);
   
   const url = await app.getUrl()

@@ -1,6 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CurrencyCode } from "../currency.enum";
 import { Account } from "./account.entity";
+import { ComAccount } from "./comAccount.entity";
 
 @Entity('user_salary')
 export class Salary extends BaseEntity {
@@ -13,8 +14,8 @@ export class Salary extends BaseEntity {
     @Column()
     payday: Date;
 
-    @ManyToOne(() => Account, account => account.salaries, { onDelete: 'CASCADE' })
-    account: Account;
+    @ManyToOne(() => ComAccount, comAccount => comAccount.salaries, { onDelete: 'CASCADE' })
+    comAccount: ComAccount;
 
     @CreateDateColumn()
     createdAt: Date;
