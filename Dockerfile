@@ -1,17 +1,23 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json tsconfig.json ./
-COPY src ./src
+COPY ./src /app/src
+COPY ./package.json /app/package.json
+COPY ./tsconfig.json /app/tsconfig.json
 
 RUN npm install
+
 RUN npm run build
 
-RUN mkdir -p logs images
-
-FROM builder AS dev
+FROM node:20-alpine AS dev
 
 ENV NODE_ENV dev
 
-CMD ["npm", "run", "start:dev"]
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/*.json ./*.json
+
+CMD ["node", "dist/src/main"]

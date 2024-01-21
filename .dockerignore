@@ -5,16 +5,13 @@
 .DS_Store
 
 .prettierrc
-.eslintrc.js
-.eslintignore
 .editorconfig
 .huskyrc
+.pre-commit-config.yaml
 .gitignore
-
-Dockerfile
-docker-compose*
 
 logs
 images
 node_modules
+test
 coverage
