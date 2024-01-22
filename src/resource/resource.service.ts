@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDocDto } from './dto/create-doc.dto';
-import { UpdateDocDto } from './dto/update-doc.dto';
+// import { CreateDocDto } from './dto/create-doc.dto';
+// import { UpdateDocDto } from './dto/update-doc.dto';
 import { DocRepository } from './repository/doc.repository';
 import { FileRepository } from './repository/file.repository';
 
