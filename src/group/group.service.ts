@@ -8,24 +8,24 @@ import { Team } from './entity/team.entity';
 
 @Injectable()
 export class GroupService {
-    constructor(
-        private readonly companyRepository: CompanyRepository,
-        private readonly teamRepository: TeamRepository,
-    ) {}
+  constructor(
+    private readonly companyRepository: CompanyRepository,
+    private readonly teamRepository: TeamRepository,
+  ) {}
 
-    async createCompany(createDto: CreateCompanyDto): Promise<Company> {
-        return this.companyRepository.createCompany(createDto);
-    }
+  async createCompany(createDto: CreateCompanyDto): Promise<Company> {
+    return this.companyRepository.createCompany(createDto);
+  }
 
-    async getCompany(id: number): Promise<Company> {
-        return this.companyRepository.findOneByOrFail({ id });
-    }
+  async getCompany(id: number): Promise<Company> {
+    return this.companyRepository.findOneByOrFail({ id });
+  }
 
-    async createTeam(createDto: CreateTeamDto): Promise<Team> {
-        return this.teamRepository.createTeam(createDto);
-    }
+  async createTeam(createDto: CreateTeamDto): Promise<Team> {
+    return this.teamRepository.createTeam(createDto);
+  }
 
-    async getCompanyTeamList(company: Company): Promise<Team[]> {
-        return this.teamRepository.findBy({ company: { id: company.id } });
-    }
+  async getCompanyTeamList(company: Company): Promise<Team[]> {
+    return this.teamRepository.findBy({ company: { id: company.id } });
+  }
 }

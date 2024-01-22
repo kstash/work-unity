@@ -1,3 +1,3 @@
 export interface IPayload {
-    accountName: string;
+  accountName: string;
 }

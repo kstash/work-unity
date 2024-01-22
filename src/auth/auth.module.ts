@@ -12,7 +12,6 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
-import { GroupModule } from 'src/group/group.module';
 import { ComAccountRepository } from 'src/user/repository/comAccount.repository';
 
 @Module({
@@ -25,19 +24,12 @@ import { ComAccountRepository } from 'src/user/repository/comAccount.repository'
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
         signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
-      })
+      }),
     }),
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [
-    JwtStrategy,
-    AuthService,
-    AccountRepository,
-    CompanyRepository,
-    ComAccountRepository,
-    UserRepository,
-  ],
+  providers: [JwtStrategy, AuthService, AccountRepository, CompanyRepository, ComAccountRepository, UserRepository],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

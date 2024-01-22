@@ -1,24 +1,33 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CurrencyCode } from "../currency.enum";
-import { Account } from "./account.entity";
-import { ComAccount } from "./comAccount.entity";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { CurrencyCode } from '../currency.enum';
+import { ComAccount } from './comAccount.entity';
 
 @Entity('user_salary')
 export class Salary extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-    @Column({ type: 'enum', enum: CurrencyCode, default: CurrencyCode.KRW })
-    currency: CurrencyCode;
-    @Column()
-    pay: number;
-    @Column()
-    payday: Date;
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column({ type: 'enum', enum: CurrencyCode, default: CurrencyCode.KRW })
+  currency: CurrencyCode;
+  @Column()
+  pay: number;
+  @Column()
+  payday: Date;
 
-    @ManyToOne(() => ComAccount, comAccount => comAccount.salaries, { onDelete: 'CASCADE' })
-    comAccount: ComAccount;
+  @ManyToOne(() => ComAccount, (comAccount) => comAccount.salaries, {
+    onDelete: 'CASCADE',
+  })
+  comAccount: ComAccount;
 
-    @CreateDateColumn()
-    createdAt: Date;
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

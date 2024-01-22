@@ -21,31 +21,31 @@ import { ComAccountRepository } from './repository/comAccount.repository';
 import { ComAccount } from './enitity/comAccount.entity';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Account, Address, Leave, Salary, User, ComAccount]),
-        forwardRef(() => AuthModule),
-        // forwardRef(() => )
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({
-                secret: configService.get('JWT_SECRET'),
-                signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
-            })
-        })
-    ],
-    controllers: [UserController],
-    providers: [
-        AuthService,
-        UserService,
-        AccountRepository,
-        AddressRepository,
-        CompanyRepository,
-        ComAccountRepository,
-        LeaveRepository,
-        SalaryRepository,
-        UserRepository
-    ],
-    exports: [UserService],
+  imports: [
+    TypeOrmModule.forFeature([Account, Address, Leave, Salary, User, ComAccount]),
+    forwardRef(() => AuthModule),
+    // forwardRef(() => )
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
+      }),
+    }),
+  ],
+  controllers: [UserController],
+  providers: [
+    AuthService,
+    UserService,
+    AccountRepository,
+    AddressRepository,
+    CompanyRepository,
+    ComAccountRepository,
+    LeaveRepository,
+    SalaryRepository,
+    UserRepository,
+  ],
+  exports: [UserService],
 })
 export class UserModule {}

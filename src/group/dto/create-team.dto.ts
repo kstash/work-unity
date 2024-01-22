@@ -1,13 +1,13 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber } from "class-validator";
-import { Company } from "../entity/company.entity";
-import { User } from "src/user/enitity/user.entity";
+import { IsNotEmpty } from 'class-validator';
+import { Company } from '../entity/company.entity';
+import { User } from 'src/user/enitity/user.entity';
 
 export class CreateTeamDto {
-    @IsNotEmpty()
-    name: string;
-    
-    @IsNotEmpty()
-    company: Company;
+  @IsNotEmpty()
+  name: string;
 
-    user: User;
+  @IsNotEmpty()
+  company: Company;
+
+  user: User;
 }

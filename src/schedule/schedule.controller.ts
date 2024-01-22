@@ -3,10 +3,8 @@ import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
 export class ScheduleController {
-    constructor(private scheduleService: ScheduleService) {}
+  constructor(private scheduleService: ScheduleService) {}
 
-    @Post('/')
-    createEvent() {
-        
-    }
+  @Post('/')
+  createEvent() {}
 }

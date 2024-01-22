@@ -8,10 +8,7 @@ import { CompanyRepository } from './repository/company.repository';
 import { TeamRepository } from './repository/team.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User]), AuthModule],
   controllers: [GroupController],
   providers: [GroupService, CompanyRepository, TeamRepository],
   exports: [GroupService, CompanyRepository, TeamRepository],

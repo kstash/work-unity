@@ -4,10 +4,8 @@ import { ApprovalRepository } from './repository/approval.repository';
 
 @Injectable()
 export class ScheduleService {
-    constructor(
-        private readonly eventRepository: EventRepository,
-        private readonly approvalRepository: ApprovalRepository
-    ) {}
-
-    
+  constructor(
+    private readonly eventRepository: EventRepository,
+    private readonly approvalRepository: ApprovalRepository,
+  ) {}
 }
