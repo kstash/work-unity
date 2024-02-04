@@ -1,30 +1,49 @@
-import { ComAccount } from 'src/user/enitity/comAccount.entity';
+import { Profile } from 'src/user/enitity/profile.entity';
+import { File } from './file.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { faker } from '@faker-js/faker';
 
 @Entity('document')
 export class Doc extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+  // -------------------------------------------------------------------------
+  @ApiProperty({ description: '문서 생성자', type: () => Profile })
+  @ManyToOne(() => Profile, (a) => a.createdDocs)
+  profile!: Profile;
+  // -------------------------------------------------------------------------
+  @ApiProperty({ description: '문서 제목', example: 'document title' })
   @Column()
-  title: string;
-  @Column()
-  content: string;
-
-  @ManyToOne(() => ComAccount, (comAccount) => comAccount.createdDocs)
-  createdBy: ComAccount;
-  @ManyToOne(() => ComAccount, (comAccount) => comAccount.updatedDocs)
-  updatedBy: ComAccount;
-
+  title!: string;
+  @ApiPropertyOptional({
+    description: '내용글',
+    example: faker.lorem.paragraphs(),
+    required: false,
+  })
+  @Column({ nullable: true })
+  content?: string;
+  // -------------------------------------------------------------------------
+  @ApiProperty({ description: '생성일자', example: faker.date.past() })
   @CreateDateColumn()
   createdAt: Date;
+  @ApiPropertyOptional({ description: '수정일자', example: faker.date.past() })
   @UpdateDateColumn()
   updatedAt: Date;
+  @ApiPropertyOptional({ description: '삭제일자', example: faker.date.past() })
+  @DeleteDateColumn()
+  deletedAt?: Date;
+  // -------------------------------------------------------------------------
+  @OneToMany(() => File, (file) => file.doc)
+  files: File[];
 }

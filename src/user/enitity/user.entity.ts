@@ -21,41 +21,53 @@ export enum Gender {
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
+  // -------------------------------------------------------------------------
   @ApiProperty({
     description: '전화번호',
     example: faker.helpers.fromRegExp('+82 10-[0-9]{4}-[0-9]{4}'),
+    required: true,
   })
   @Column({ unique: true })
-  phone: string;
+  phone!: string;
   @ApiProperty({ description: '이메일', example: faker.internet.email() })
-  @Column()
-  email: string;
-
+  @Column({ nullable: true })
+  email?: string;
   @ApiProperty({ description: '이름', example: faker.person.fullName() })
   @Column()
   name: string;
-  @ApiPropertyOptional({ enum: Gender, description: '성별' })
+  @ApiPropertyOptional({
+    description: '성별',
+    enum: Gender,
+    required: false,
+  })
   @Column({ type: 'enum', enum: Gender, default: Gender.NONE })
-  gender: Gender;
+  gender?: Gender;
   @ApiProperty({
-    type: Date,
-    example: '2000-01-01',
     description: '생년월일',
+    example: faker.date.birthdate(),
   })
   @Column()
-  birth: Date;
-
-  @OneToMany(() => Account, (account) => account.user)
-  accounts: Account[];
-
+  birth!: Date;
+  @ApiPropertyOptional({
+    description: '주소',
+    example: faker.location.streetAddress(),
+  })
+  @Column({ nullable: true })
+  address?: string;
+  // -------------------------------------------------------------------------
+  @ApiPropertyOptional({
+    description: '생성일자',
+    example: faker.date.recent(),
+  })
   @CreateDateColumn()
   createdAt: Date;
   @ApiPropertyOptional({
-    type: Date,
-    example: '2024-01-01',
-    description: '사용자 정보 수정일시',
+    description: '수정일자',
+    example: faker.date.recent(),
   })
   @UpdateDateColumn()
   updatedAt: Date;
+  // -------------------------------------------------------------------------
+  @OneToMany(() => Account, (account) => account.user)
+  accounts: Account[];
 }

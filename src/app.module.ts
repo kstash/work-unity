@@ -6,7 +6,6 @@ import { UserModule } from './user/user.module';
 import { ResourceModule } from './resource/resource.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import { AddressModule } from './address/address.module';
     UserModule,
     ResourceModule,
     DatabaseModule,
-    AddressModule,
   ],
 })
 export class AppModule {}

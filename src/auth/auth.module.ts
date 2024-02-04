@@ -12,7 +12,7 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
-import { ComAccountRepository } from 'src/user/repository/comAccount.repository';
+import { ProfileRepository } from 'src/user/repository/profile.repository';
 
 @Module({
   imports: [
@@ -29,7 +29,14 @@ import { ComAccountRepository } from 'src/user/repository/comAccount.repository'
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, AuthService, AccountRepository, CompanyRepository, ComAccountRepository, UserRepository],
+  providers: [
+    JwtStrategy,
+    AuthService,
+    AccountRepository,
+    CompanyRepository,
+    ProfileRepository,
+    UserRepository,
+  ],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

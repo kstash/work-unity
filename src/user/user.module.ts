@@ -5,11 +5,9 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Account } from './enitity/account.entity';
 import { AccountRepository } from './repository/account.repository';
-import { AddressRepository } from './repository/address.repsotiroy';
 import { LeaveRepository } from './repository/leave.repository';
 import { SalaryRepository } from './repository/salary.repository';
 import { UserRepository } from './repository/user.repository';
-import { Address } from './enitity/address.entity';
 import { Leave } from './enitity/leave.entity';
 import { Salary } from './enitity/salary.entity';
 import { AuthService } from 'src/auth/auth.service';
@@ -17,14 +15,13 @@ import { AuthModule } from 'src/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
-import { ComAccountRepository } from './repository/comAccount.repository';
-import { ComAccount } from './enitity/comAccount.entity';
+import { ProfileRepository } from './repository/profile.repository';
+import { Profile } from './enitity/profile.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Account, Address, Leave, Salary, User, ComAccount]),
+    TypeOrmModule.forFeature([Account, Leave, Salary, User, Profile]),
     forwardRef(() => AuthModule),
-    // forwardRef(() => )
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -39,9 +36,8 @@ import { ComAccount } from './enitity/comAccount.entity';
     AuthService,
     UserService,
     AccountRepository,
-    AddressRepository,
     CompanyRepository,
-    ComAccountRepository,
+    ProfileRepository,
     LeaveRepository,
     SalaryRepository,
     UserRepository,

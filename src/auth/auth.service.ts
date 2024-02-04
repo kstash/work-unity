@@ -12,9 +12,9 @@ import { SignupUserDto } from './dto/signupUser.dto';
 import { SignupCompanyDto } from './dto/signupCompany.dto';
 import { Company } from 'src/group/entity/company.entity';
 import { CompanyRepository } from 'src/group/repository/company.repository';
-import { ComAccountRepository } from 'src/user/repository/comAccount.repository';
-import { ComAccountType } from 'src/user/enitity/comAccount.entity';
-import { CreateComAccountDto } from 'src/user/dto/create-comAccount.dto';
+import { ProfileRepository } from 'src/user/repository/profile.repository';
+import { Authority } from 'src/user/enitity/profile.entity';
+import { CreateProfileDto } from 'src/user/dto/create-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +22,7 @@ export class AuthService {
     private accountRepository: AccountRepository,
     private userRepository: UserRepository,
     private companyRepository: CompanyRepository,
-    private comAccountRepository: ComAccountRepository,
+    private comAccountRepository: ProfileRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -38,12 +38,15 @@ export class AuthService {
     return account;
   }
 
-  async signupCompany(companyInfo: SignupCompanyDto, account: Account): Promise<Company> {
+  async signupCompany(
+    companyInfo: SignupCompanyDto,
+    account: Account,
+  ): Promise<Company> {
     const company = await this.companyRepository.createCompany(companyInfo);
-    const comAccountDto: CreateComAccountDto = {
+    const comAccountDto: CreateProfileDto = {
       account,
       company,
-      type: ComAccountType.MANAGER,
+      type: Authority.MANAGER,
     };
     await this.comAccountRepository.createComAccount(comAccountDto);
     return company;
@@ -63,7 +66,8 @@ export class AuthService {
   }
 
   async tokenValidateAccount(payload: IPayload): Promise<Account> {
-    const account = await this.accountRepository.findByAccountName(payload.accountName);
+    const accountName = payload.accountName;
+    const account = await this.accountRepository.findByAccountName(accountName);
     return account;
   }
 

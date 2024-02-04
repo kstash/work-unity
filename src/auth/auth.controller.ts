@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Account } from 'src/user/enitity/account.entity';
 import { User } from 'src/user/enitity/user.entity';
@@ -54,9 +62,15 @@ export class AuthController {
     type: SignupCompanyResponse,
   })
   @UseGuards(AuthGuard)
-  async signUpCompany(@Body() dto: SignupCompanyDto, @GetAccount() account: Account, @Res() res: Response) {
+  async signUpCompany(
+    @Body() dto: SignupCompanyDto,
+    @GetAccount() account: Account,
+    @Res() res: Response,
+  ) {
     const company: Company = await this.authService.signupCompany(dto, account);
-    return res.status(HttpStatus.CREATED).json(SignupAccountResponse.apply(company));
+    return res
+      .status(HttpStatus.CREATED)
+      .json(SignupAccountResponse.apply(company));
   }
 
   @Post('/signin')

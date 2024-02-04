@@ -1,4 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { MESSAGES } from '@nestjs/core/constants';
 import { Request, Response } from 'express';
 
@@ -9,9 +15,15 @@ export class GroupFilter<T> implements ExceptionFilter {
     const request: Request = ctx.getRequest<Request>();
     const response: Response = ctx.getResponse<Response>();
 
-    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = exception instanceof HttpException ? exception.message : MESSAGES.UNKNOWN_EXCEPTION_MESSAGE;
+    const message =
+      exception instanceof HttpException
+        ? exception.message
+        : MESSAGES.UNKNOWN_EXCEPTION_MESSAGE;
 
     response.status(status).json({
       statusCode: status,

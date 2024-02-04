@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -11,25 +10,25 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Company } from './company.entity';
-import { ComAccount } from 'src/user/enitity/comAccount.entity';
+import { Profile } from 'src/user/enitity/profile.entity';
 
-@Entity('company_team')
-@Unique(['name', 'company'])
+@Entity('team')
+@Unique('unique_company_team_name_restraint', ['name', 'company'])
 export class Team extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
-  name: string;
-
-  @ManyToOne(() => Company, (company) => company.teams, { cascade: true })
-  @JoinColumn({ name: 'id' })
+  // -------------------------------------------------------------------------
+  @ManyToOne(() => Company, (company) => company.teams)
   company: Company;
-
-  @OneToMany(() => ComAccount, (comAccount) => comAccount.team)
-  comAccounts: ComAccount[];
-
+  // -------------------------------------------------------------------------
+  @Column()
+  name!: string;
+  // -------------------------------------------------------------------------
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
+  // -------------------------------------------------------------------------
+  @OneToMany(() => Profile, (profile) => profile.team)
+  profiles: Profile[];
 }
