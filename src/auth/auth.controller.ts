@@ -55,6 +55,7 @@ export class AuthController {
     type: Company,
   })
   @UseGuards(AuthGuard)
+  @UsePipes(ValidationPipe)
   async signUpCompany(
     @GetAccount() account: Account,
     @Body() dto: SignupCompanyDto,
