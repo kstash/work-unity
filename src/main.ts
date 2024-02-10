@@ -16,8 +16,12 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const port = Number(process.env.APP_PORT);
+
+  // pipes
+
   // swagger
   setupSwagger(app);
+
   await app.listen(port);
 
   const url = await app.getUrl();

@@ -76,9 +76,6 @@ export class AuthService {
   }
 
   async getUser(account: Account): Promise<User> {
-    if (!account.user) {
-      return null;
-    }
     const user = await this.userRepository.findById(account.user.id);
     return user;
   }

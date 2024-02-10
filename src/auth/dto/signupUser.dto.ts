@@ -10,16 +10,15 @@ import {
   Matches,
 } from 'class-validator';
 import { Gender } from 'src/user/enitity/user.entity';
-import { SignupAccountDto } from './signupAccount.dto';
 
 // TODO: @ApiProperty 데코레이터는 interface 에 작성후 DTO class 에서 implement 하도록 변경
-export class SignupUserDto extends SignupAccountDto {
+export class SignupUserDto {
   @ApiProperty({ description: '이름' })
-  @IsNotEmpty({ message: 'invalid user name' })
+  @IsNotEmpty()
   @IsString()
   name!: string;
 
-  @IsString()
+  @IsNotEmpty()
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
     message: '$property must be yyyy-mm-dd format',
   })
@@ -31,10 +30,12 @@ export class SignupUserDto extends SignupAccountDto {
     description: '전화번호',
     example: faker.helpers.fromRegExp('+82 10-[0-9]{4}-[0-9]{4}'),
   })
+  @IsNotEmpty()
   @IsPhoneNumber('KR', { message: 'invalid phone number' })
   phone!: string;
 
   @ApiProperty({ description: '성별', enum: Gender })
+  @IsNotEmpty()
   @IsEnum(Gender, { message: 'invalid gender' })
   gender!: Gender;
 

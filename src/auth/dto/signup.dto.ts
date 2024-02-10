@@ -1,10 +1,14 @@
-import { IsObject } from 'class-validator';
+import { ValidateNested } from 'class-validator';
 import { SignupAccountDto } from './signupAccount.dto';
 import { SignupUserDto } from './signupUser.dto';
+import { Type } from 'class-transformer';
 
 export class SignupDto {
-  @IsObject()
+  @ValidateNested({ message: 'invalid user info' })
+  @Type(() => SignupUserDto)
   user: SignupUserDto;
-  @IsObject()
+
+  @ValidateNested({ message: 'invalid account info' })
+  @Type(() => SignupUserDto)
   account: SignupAccountDto;
 }
