@@ -7,7 +7,6 @@ import {
   Res,
   UseGuards,
   UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Account } from 'src/user/enitity/account.entity';
