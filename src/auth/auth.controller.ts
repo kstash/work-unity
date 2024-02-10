@@ -7,6 +7,7 @@ import {
   Res,
   UseGuards,
   UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Account } from 'src/user/enitity/account.entity';
@@ -55,8 +56,8 @@ export class AuthController {
   })
   @UseGuards(AuthGuard)
   async signUpCompany(
-    @Body() dto: SignupCompanyDto,
     @GetAccount() account: Account,
+    @Body() dto: SignupCompanyDto,
     @Res() res: Response,
   ) {
     const company = await this.authService.signupCompany(dto, account);

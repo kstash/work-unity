@@ -9,6 +9,6 @@ export class SignupDto {
   user: SignupUserDto;
 
   @ValidateNested({ message: 'invalid account info' })
-  @Type(() => SignupUserDto)
+  @Type(() => SignupAccountDto)
   account: SignupAccountDto;
 }

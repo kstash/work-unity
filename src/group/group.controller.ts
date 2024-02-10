@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseFilters } from '@nestjs/common';
 import { GroupService } from './group.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { Team } from './entity/team.entity';
 import { Company } from './entity/company.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
@@ -10,11 +9,6 @@ import { GroupFilter } from './group.filter';
 @UseFilters(GroupFilter)
 export class GroupController {
   constructor(private groupService: GroupService) {}
-
-  @Post('/company')
-  createCompany(@Body() createDto: CreateCompanyDto): Promise<Company> {
-    return this.groupService.createCompany(createDto);
-  }
 
   @Get('/company/:id')
   getCompany(@Param('id') id: number): Promise<Company> {

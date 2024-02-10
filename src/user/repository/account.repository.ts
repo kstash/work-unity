@@ -47,12 +47,4 @@ export class AccountRepository extends Repository<Account> {
       }
     }
   }
-
-  async findUser(accountName: string): Promise<User> {
-    const result = await this.findOneOrFail({
-      relations: { user: true },
-      where: { accountName },
-    });
-    return result.user;
-  }
 }

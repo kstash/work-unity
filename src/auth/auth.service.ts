@@ -23,7 +23,7 @@ export class AuthService {
     private accountRepository: AccountRepository,
     private userRepository: UserRepository,
     private companyRepository: CompanyRepository,
-    private comAccountRepository: ProfileRepository,
+    private profileRepository: ProfileRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -40,30 +40,37 @@ export class AuthService {
   }
 
   async signupCompany(
-    companyInfo: SignupCompanyDto,
+    companyDto: SignupCompanyDto,
     account: Account,
   ): Promise<Company> {
-    const company = await this.companyRepository.createCompany(companyInfo);
-    const comAccountDto: CreateProfileDto = {
+    const company = await this.companyRepository.createCompany(companyDto);
+    const profileDto: CreateProfileDto = {
       account,
       company,
       type: Authority.MANAGER,
     };
-    await this.comAccountRepository.createComAccount(comAccountDto);
+    await this.profileRepository.createProfile(profileDto);
     return company;
   }
 
   async signIn(dto: SigninDto): Promise<IAuthToken> {
     const { accountName, password } = dto;
     const account = await this.accountRepository.findByAccountName(accountName);
+    const profile = await this.profileRepository.findByAccount(account);
 
     if (account && (await bcrypt.compare(password, account.password))) {
       // Generate JWT and return it
       const payload: IPayload = {
-        id: account.id,
         accountName: account.accountName,
+        profileId: profile?.id,
       };
-      return { accessToken: await this.jwtService.sign(payload) };
+      return {
+        accessToken: await this.jwtService.sign(payload),
+        refreshToken: await this.jwtService.sign(payload, {
+          expiresIn: '7d',
+          secret: process.env.JWT_SECRET,
+        }),
+      };
     } else {
       throw new UnauthorizedException('login failed');
     }

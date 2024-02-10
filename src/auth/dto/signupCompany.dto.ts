@@ -25,6 +25,7 @@ export class SignupCompanyDto {
   @IsString()
   address!: string;
 
+  // TODO: 법인등록번호 관련 인증 시스템 구축 필요
   @ApiProperty({
     description: '법인등록번호',
     example: faker.helpers.fromRegExp('[0-9]{6}-[0-9]{7}'),
@@ -33,6 +34,7 @@ export class SignupCompanyDto {
   @Matches(/^[0-9]{6}-[0-9]{7}$/)
   businessReg!: string;
 
+  // TODO: 사업자등록번호 관련 인증 시스템 구축 필요
   @ApiProperty({
     description: '사업자등록번호',
     example: faker.helpers.fromRegExp('[0-9]{3}-[0-9]{2}-[0-9]{5}'),
