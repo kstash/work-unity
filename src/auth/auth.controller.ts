@@ -6,6 +6,8 @@ import {
   Post,
   Res,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Account } from 'src/user/enitity/account.entity';
@@ -15,51 +17,41 @@ import { SigninDto } from './dto/signin.dto';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SignupUserResponse } from './response/signupUser.response';
-import { SignupUserDto } from './dto/signupUser.dto';
-import { SignupAccountResponse } from './response/signupAccount.response';
-import { SignupCompanyResponse } from './response/signupCompany.response';
 import { Company } from 'src/group/entity/company.entity';
 import { SignupCompanyDto } from './dto/signupCompany.dto';
+import { SignupDto } from './dto/signup.dto';
+import { SignupAccountResponse } from './response/signupAccount.response';
 
 @Controller('auth')
-@ApiTags('계정 API')
+@ApiTags('User & Account API Endpoints')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup/user')
+  @UsePipes(ValidationPipe)
   @ApiOperation({
-    summary: '개인 회원가입 1단계',
-    description: '기존 회원인지 확인하기 위한 사용자 정보',
+    summary: '개인 회원가입',
+    description: '회원 신원 정보 및 계정 정보',
   })
   @ApiCreatedResponse({
-    description: '찾거나 생성한 사용자 정보 반환',
-    type: SignupUserResponse,
-  })
-  async signupUser(@Body() dto: SignupUserDto, @Res() res: Response) {
-    const user: User = await this.authService.signupUser(dto);
-    return res.status(HttpStatus.CREATED).json(SignupUserResponse.apply(user));
-  }
-
-  @Post('/signup/account')
-  @ApiOperation({
-    summary: '개인 회원가입 2단계',
-    description: '개인 회원가입',
-  })
-  @ApiCreatedResponse({
-    description: '계정을 생성한다.',
+    description: '생성된 계정 정보 반환',
     type: SignupAccountResponse,
   })
-  async signupAccount(@Body() dto, @Res() res: Response) {
-    const account: Account = await this.authService.signupAccount(dto);
-    return res.status(HttpStatus.CREATED).json(account);
+  async signupUser(@Body() dto: SignupDto, @Res() res: Response) {
+    const account: Account = await this.authService.signup(
+      dto.user,
+      dto.account,
+    );
+    const signupAccountResponse = new SignupAccountResponse(account);
+
+    return res.status(HttpStatus.CREATED).json(signupAccountResponse);
   }
 
   @Post('/signup/company')
   @ApiOperation({ summary: '기업 회원가입', description: '기업용 회원가입' })
   @ApiCreatedResponse({
     description: '기업을 등록하고 본인의 계정을 기업에 연결한다.',
-    type: SignupCompanyResponse,
+    type: Company,
   })
   @UseGuards(AuthGuard)
   async signUpCompany(
@@ -68,9 +60,7 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const company: Company = await this.authService.signupCompany(dto, account);
-    return res
-      .status(HttpStatus.CREATED)
-      .json(SignupAccountResponse.apply(company));
+    return res.status(HttpStatus.CREATED).json(company);
   }
 
   @Post('/signin')
@@ -81,7 +71,7 @@ export class AuthController {
     return res.status(HttpStatus.ACCEPTED).json(jwt);
   }
 
-  @Get('/account/me')
+  @Get('/me')
   @ApiOperation({
     summary: '내 계정 정보',
     description: '내 계정 정보 가져오기',

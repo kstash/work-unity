@@ -9,7 +9,6 @@ import { Account } from '../user/enitity/account.entity';
 import { User } from 'src/user/enitity/user.entity';
 import { AccountRepository } from 'src/user/repository/account.repository';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
 import { ProfileRepository } from 'src/user/repository/profile.repository';
@@ -26,7 +25,6 @@ import { ProfileRepository } from 'src/user/repository/profile.repository';
         signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
       }),
     }),
-    UserModule,
   ],
   controllers: [AuthController],
   providers: [

@@ -1,25 +1,25 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import { IsEmail, IsPhoneNumber, IsString, Matches } from 'class-validator';
 
 export class SignupCompanyDto {
   @ApiProperty({ description: '회사명', example: faker.company.name() })
   @IsString()
   name!: string;
 
-  @ApiProperty({
-    description: '회사 대표 메일',
-    example: faker.internet.email(),
-  })
+  @ApiProperty({ description: '메일', example: faker.internet.email() })
   @IsEmail()
   email!: string;
 
-  @ApiProperty({ description: '회사 전화번호', example: faker.phone.number() })
+  @ApiProperty({
+    description: '전화번호',
+    example: faker.helpers.fromRegExp('+82 10-[0-9]{4}-[0-9]{4}'),
+  })
   @IsPhoneNumber('KR')
   phone!: string;
 
   @ApiProperty({
-    description: '회사 주소',
+    description: '주소',
     example: faker.location.streetAddress(),
   })
   @IsString()
@@ -27,15 +27,17 @@ export class SignupCompanyDto {
 
   @ApiProperty({
     description: '법인등록번호',
-    example: faker.helpers.replaceCreditCardSymbols(),
+    example: faker.helpers.fromRegExp('[0-9]{6}-[0-9]{7}'),
   })
   @IsString()
+  @Matches(/^[0-9]{6}-[0-9]{7}$/)
   businessReg!: string;
 
   @ApiProperty({
     description: '사업자등록번호',
-    example: faker.helpers.replaceCreditCardSymbols(),
+    example: faker.helpers.fromRegExp('[0-9]{3}-[0-9]{2}-[0-9]{5}'),
   })
   @IsString()
+  @Matches(/^[0-9]{3}-[0-9]{2}-[0-9]{5}$/)
   traderReg!: string;
 }

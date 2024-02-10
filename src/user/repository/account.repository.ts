@@ -16,11 +16,11 @@ export class AccountRepository extends Repository<Account> {
     super(Account, dataSource.createEntityManager());
   }
 
-  async createAccount(dto: CreateAccountDto): Promise<Account> {
+  async createAccount(user: User, dto: CreateAccountDto): Promise<Account> {
     const salt = await bcrypt.genSalt();
     dto.password = await bcrypt.hash(dto.password, salt);
     try {
-      const account = this.create(dto);
+      const account = this.create({ user, ...dto });
       const result = this.save(account);
       return result;
     } catch (error) {

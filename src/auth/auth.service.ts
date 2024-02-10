@@ -15,6 +15,7 @@ import { CompanyRepository } from 'src/group/repository/company.repository';
 import { ProfileRepository } from 'src/user/repository/profile.repository';
 import { Authority } from 'src/user/enitity/profile.entity';
 import { CreateProfileDto } from 'src/user/dto/create-profile.dto';
+import { SignupAccountDto } from './dto/signupAccount.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,15 +27,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signupUser(dto: SignupUserDto): Promise<User> {
-    let user: User;
-    user = await this.userRepository.findByPhone(dto.phone);
-    if (!user) user = await this.userRepository.createUser(dto);
-    return user;
-  }
-
-  async signupAccount(dto): Promise<Account> {
-    const account: Account = await this.accountRepository.createAccount(dto);
+  async signup(
+    userDto: SignupUserDto,
+    accountDto: SignupAccountDto,
+  ): Promise<Account> {
+    const user = await this.userRepository.createUser(userDto);
+    const account = await this.accountRepository.createAccount(
+      user,
+      accountDto,
+    );
     return account;
   }
 
@@ -58,7 +59,10 @@ export class AuthService {
 
     if (account && (await bcrypt.compare(password, account.password))) {
       // Generate JWT and return it
-      const payload: IPayload = { accountName };
+      const payload: IPayload = {
+        id: account.id,
+        accountName: account.accountName,
+      };
       return { accessToken: await this.jwtService.sign(payload) };
     } else {
       throw new UnauthorizedException('login failed');

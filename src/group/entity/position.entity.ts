@@ -6,7 +6,7 @@ import {
   // Unique,
 } from 'typeorm';
 
-@Entity('company_position')
+@Entity('position')
 // @Unique(['name', 'company'])
 export class Position extends BaseEntity {
   @PrimaryGeneratedColumn()

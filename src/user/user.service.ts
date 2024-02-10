@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from './repository/user.repository';
 import { AccountRepository } from './repository/account.repository';
 import { LeaveRepository } from './repository/leave.repository';
@@ -20,17 +16,9 @@ export class UserService {
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    try {
-      const user = this.userRepository.create(dto);
-      const result = await this.userRepository.save(user);
-      return result;
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException('User already exists');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    const user = this.userRepository.create(dto);
+    const result = await this.userRepository.save(user);
+    return result;
   }
 
   async getUserById(id: number): Promise<User> {

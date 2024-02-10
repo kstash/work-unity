@@ -29,19 +29,18 @@ export class User extends BaseEntity {
   })
   @Column({ unique: true })
   phone!: string;
-  @ApiProperty({ description: '이메일', example: faker.internet.email() })
+  @ApiPropertyOptional({
+    description: '이메일',
+    example: faker.internet.email(),
+  })
   @Column({ nullable: true })
   email?: string;
   @ApiProperty({ description: '이름', example: faker.person.fullName() })
   @Column()
   name: string;
-  @ApiPropertyOptional({
-    description: '성별',
-    enum: Gender,
-    required: false,
-  })
+  @ApiPropertyOptional({ description: '성별', enum: Gender })
   @Column({ type: 'enum', enum: Gender, default: Gender.NONE })
-  gender?: Gender;
+  gender: Gender;
   @ApiProperty({
     description: '생년월일',
     example: faker.date.birthdate(),
