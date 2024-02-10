@@ -17,8 +17,14 @@ export const TypeOrmOptions: TypeOrmModuleAsyncOptions = {
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: configService.get<boolean>('DB_SYNC'),
     autoLoadEntities: true,
-    ssl: configService.get('NODE_ENV') !== 'local' ? { ca: fs.readFileSync(configService.get('DB_CA')) } : false,
-    extra: configService.get('NODE_ENV') !== 'local' ? { rejectUnauthorized: false } : false,
+    ssl:
+      configService.get('NODE_ENV') !== 'local'
+        ? { ca: fs.readFileSync(configService.get('DB_CA')) }
+        : false,
+    extra:
+      configService.get('NODE_ENV') !== 'local'
+        ? { rejectUnauthorized: false }
+        : false,
   }),
   async dataSourceFactory(option) {
     if (!option) throw new Error('Option is required');

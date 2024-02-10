@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../enitity/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -37,7 +42,12 @@ export class UserRepository extends Repository<User> {
   }
 
   async findByPhone(phone: string) {
-    const result = await this.findOneBy({ phone });
+    console.log(phone);
+    const result = await this.findOne({
+      select: { phone: true },
+      where: { phone: undefined },
+    });
+    console.log(`result: ${JSON.stringify(result, null, 4)}`);
     return result;
   }
 }

@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Team } from '../entity/team.entity';
 import { CreateTeamDto } from '../dto/create-team.dto';

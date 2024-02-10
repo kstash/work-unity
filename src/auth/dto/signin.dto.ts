@@ -1,26 +1,32 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsStrongPassword } from 'class-validator';
 
 export class SigninDto {
   @ApiProperty({
-    description: '사용자 아이디',
+    description: '계정 아이디',
     example: faker.internet.userName(),
   })
-  @IsString()
-  @MinLength(4)
-  @MaxLength(20)
-  accountName: string;
+  @IsNotEmpty()
+  accountName!: string;
 
   @ApiProperty({
-    description: '사용자 비밀번호',
-    example: faker.internet.password({ length: 20, pattern: /^[a-zA-Z0-9]*$/ }),
+    description: '계정 비밀번호',
+    example: faker.internet.password(),
   })
-  @IsString()
-  @MinLength(4)
-  @MaxLength(20)
-  @Matches(/^[a-zA-Z0-9]*$/, {
-    message: 'password only accepts english and number',
-  })
-  password: string;
+  @IsNotEmpty()
+  @IsStrongPassword(
+    {
+      minLength: 10,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 2,
+      minSymbols: 2,
+    },
+    {
+      message:
+        'password is too weak (require at least 8 characters, 1 lowercase, 1 uppercase, 1 number, 1 symbol)',
+    },
+  )
+  password!: string;
 }

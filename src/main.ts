@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import { StorageDriver, initializeTransactionalContext } from 'typeorm-transactional';
+import {
+  StorageDriver,
+  initializeTransactionalContext,
+} from 'typeorm-transactional';
 import { configDotenv } from 'dotenv';
 import { setupSwagger } from './util/swagger';
 
@@ -13,8 +16,12 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const port = Number(process.env.APP_PORT);
+
+  // pipes
+
   // swagger
   setupSwagger(app);
+
   await app.listen(port);
 
   const url = await app.getUrl();

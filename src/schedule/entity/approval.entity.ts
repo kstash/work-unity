@@ -8,7 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ComAccount } from 'src/user/enitity/comAccount.entity';
+import { Profile } from 'src/user/enitity/profile.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { faker } from '@faker-js/faker';
 
 export enum ApprovalType {
   WAITING = 'waiting', // 대기중
@@ -18,26 +20,36 @@ export enum ApprovalType {
   EXPIRED = 'expired', // event.startedAt > Date.now()
 }
 
-@Entity()
+@Entity('approval')
 export class Approval extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+  // -------------------------------------------------------------------------
+  @ApiProperty({ description: '결재 요청 이벤트', type: () => Event })
+  @ManyToOne(() => Event, (event) => event.approvals)
+  event!: Event;
+  @ApiProperty({ description: '결재자', type: () => Profile })
+  @ManyToOne(() => Profile, (profile) => profile.approvals)
+  profile!: Profile;
+  // -------------------------------------------------------------------------
+  @ApiPropertyOptional({ description: '결재 유형', type: () => ApprovalType })
   @Column({ type: 'enum', enum: ApprovalType, default: ApprovalType.WAITING })
   type: ApprovalType;
+  @ApiProperty({ description: '결재 순서', type: () => Number })
   @Column()
-  order: number;
-  @Column({ default: null })
-  message: string;
-
-  @ManyToOne(() => Event, (event) => event.approvals, { onDelete: 'CASCADE' })
-  event: Event;
-  @ManyToOne(() => ComAccount, (comAccount) => comAccount.approvals, {
-    onDelete: 'CASCADE',
+  order!: number;
+  @ApiPropertyOptional({
+    description: '결재 관련 작성 메세지',
+    type: () => String,
+    required: false,
   })
-  approveBy: ComAccount;
-
+  @Column({ nullable: true })
+  message?: string;
+  // -------------------------------------------------------------------------a
+  @ApiProperty({ description: '생성일자', example: faker.date.recent() })
   @CreateDateColumn()
   createdAt: Date;
+  @ApiPropertyOptional({ description: '수정일자', example: faker.date.soon() })
   @UpdateDateColumn()
   updatedAt: Date;
 }

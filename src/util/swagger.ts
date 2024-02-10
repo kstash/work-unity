@@ -12,7 +12,6 @@ export function setupSwagger(app: INestApplication): void {
     .setTitle(`${name} API Docs`)
     .setDescription(`${name} API description`)
     .setVersion(version)
-    .addTag('swagger')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

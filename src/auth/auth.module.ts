@@ -9,10 +9,9 @@ import { Account } from '../user/enitity/account.entity';
 import { User } from 'src/user/enitity/user.entity';
 import { AccountRepository } from 'src/user/repository/account.repository';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
-import { ComAccountRepository } from 'src/user/repository/comAccount.repository';
+import { ProfileRepository } from 'src/user/repository/profile.repository';
 
 @Module({
   imports: [
@@ -26,10 +25,16 @@ import { ComAccountRepository } from 'src/user/repository/comAccount.repository'
         signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
       }),
     }),
-    UserModule,
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, AuthService, AccountRepository, CompanyRepository, ComAccountRepository, UserRepository],
+  providers: [
+    JwtStrategy,
+    AuthService,
+    AccountRepository,
+    CompanyRepository,
+    ProfileRepository,
+    UserRepository,
+  ],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
