@@ -42,12 +42,9 @@ export class UserRepository extends Repository<User> {
   }
 
   async findByPhone(phone: string) {
-    console.log(phone);
     const result = await this.findOne({
-      select: { phone: true },
-      where: { phone: undefined },
+      where: { phone },
     });
-    console.log(`result: ${JSON.stringify(result, null, 4)}`);
     return result;
   }
 }
