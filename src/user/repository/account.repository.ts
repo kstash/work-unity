@@ -9,6 +9,7 @@ import * as bcrypt from 'bcryptjs';
 import { Account } from '../enitity/account.entity';
 import { User } from '../enitity/user.entity';
 import { CreateAccountDto } from '../dto/create-account.dto';
+import { ProfileAccount } from 'src/auth/interface/profileAccount.interface';
 
 @Injectable()
 export class AccountRepository extends Repository<Account> {
@@ -32,7 +33,7 @@ export class AccountRepository extends Repository<Account> {
     }
   }
 
-  async findByAccountName(accountName: string): Promise<Account> {
+  async findByAccountName(accountName: string): Promise<ProfileAccount> {
     try {
       const result = await this.findOneOrFail({
         relations: { user: true },

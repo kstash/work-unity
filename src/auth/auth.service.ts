@@ -91,14 +91,13 @@ export class AuthService {
 
   async tokenValidate(payload: IPayload): Promise<ProfileAccount> {
     const { accountName, profileId } = payload;
-    const account = (await this.accountRepository.findByAccountName(
-      accountName,
-    )) as ProfileAccount;
+    const profileAccount =
+      await this.accountRepository.findByAccountName(accountName);
     if (profileId) {
       const profile = await this.profileRepository.findById(profileId);
-      account.profile = profile;
+      profileAccount.profile = profile;
     }
-    return account;
+    return profileAccount;
   }
 
   async getUser(account: Account): Promise<User> {
