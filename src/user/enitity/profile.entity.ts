@@ -34,7 +34,10 @@ export class Profile extends BaseEntity {
   @ManyToOne(() => Account, (account) => account.profiles)
   account!: Account;
   @ApiProperty({ description: '회사', type: () => Company, required: true })
-  @ManyToOne(() => Company, (company) => company.profiles)
+  @ManyToOne(() => Company, (company) => company.profiles, {
+    nullable: true,
+    eager: true,
+  })
   company!: Company;
   @ApiPropertyOptional({
     description: '소속 팀',
