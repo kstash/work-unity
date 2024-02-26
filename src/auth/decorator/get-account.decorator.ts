@@ -5,7 +5,6 @@ import { ProfileAccount } from '../interface/profileAccount.interface';
 export const GetAccount = createParamDecorator(
   (data, ctx: ExecutionContext): Account | ProfileAccount => {
     const req = ctx.switchToHttp().getRequest();
-    console.log(req.user);
     return req.user;
   },
 );

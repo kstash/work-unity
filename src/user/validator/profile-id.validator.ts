@@ -11,7 +11,6 @@ export class IsValidProfileId implements ValidatorConstraintInterface {
 
   async validate(profileId: number) {
     const profile = await this.userService.getProfileById(profileId);
-    console.log(`profile: ${profile}`);
     return !!profile;
   }
 

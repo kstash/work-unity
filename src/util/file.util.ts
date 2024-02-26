@@ -7,7 +7,6 @@ import * as fs from 'fs';
  */
 export const removeFile = (filePath: string) => {
   if (fs.existsSync(filePath)) {
-    console.log(filePath);
     fs.unlinkSync(filePath);
   } else {
     console.log(`File ${filePath} does not exist`);
