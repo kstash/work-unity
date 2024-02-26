@@ -84,8 +84,8 @@ export class AuthController {
   })
   @ApiCreatedResponse({ description: '내 계정 정보', type: User })
   @UseGuards(JwtAuthGuard)
-  getAccount(@GetAccount() account) {
-    const user = this.authService.getUser(account);
-    return user;
+  async getAccount(@GetAccount() account, @Res() res: Response) {
+    const user = await this.authService.getUser(account);
+    return res.status(HttpStatus.OK).json(user);
   }
 }
