@@ -16,6 +16,7 @@ import { ProfileRepository } from 'src/user/repository/profile.repository';
 import { Authority } from 'src/user/enitity/profile.entity';
 import { CreateProfileDto } from 'src/user/dto/create-profile.dto';
 import { SignupAccountDto } from './dto/signupAccount.dto';
+import { ProfileAccount } from './interface/profileAccount.interface';
 
 @Injectable()
 export class AuthService {
@@ -54,31 +55,49 @@ export class AuthService {
   }
 
   async signIn(dto: SigninDto): Promise<IAuthToken> {
-    const { accountName, password } = dto;
-    const account = await this.accountRepository.findByAccountName(accountName);
-    const profile = await this.profileRepository.findByAccount(account);
+    const { accountName, password, profileId } = dto;
+    // Since column password is non-selected by default,
+    // we need to select it manually by using queryBuilder
+    const account = await this.accountRepository
+      .createQueryBuilder('account')
+      .addSelect('account.password')
+      .where('account.accountName = :accountName', { accountName })
+      .getOneOrFail();
+    const payload: IPayload = { accountName: account.accountName };
 
-    if (account && (await bcrypt.compare(password, account.password))) {
-      // Generate JWT and return it
-      const payload: IPayload = {
-        accountName: account.accountName,
-        profileId: profile?.id,
-      };
-      return {
-        accessToken: await this.jwtService.sign(payload),
-        refreshToken: await this.jwtService.sign(payload, {
-          expiresIn: '7d',
-          secret: process.env.JWT_SECRET,
-        }),
-      };
-    } else {
+    if (!(await bcrypt.compare(password, account.password))) {
       throw new UnauthorizedException('login failed');
     }
+
+    if (dto.profileId) {
+      const profile = await this.profileRepository.findByIdAndAccount(
+        account,
+        profileId,
+      );
+      payload.profileId = profile.id;
+    }
+
+    return {
+      accessToken: await this.jwtService.sign(payload, {
+        expiresIn: '1h',
+        secret: process.env.JWT_SECRET,
+      }),
+      refreshToken: await this.jwtService.sign(payload, {
+        expiresIn: '7d',
+        secret: process.env.JWT_SECRET,
+      }),
+    };
   }
 
-  async tokenValidateAccount(payload: IPayload): Promise<Account> {
-    const accountName = payload.accountName;
-    const account = await this.accountRepository.findByAccountName(accountName);
+  async tokenValidate(payload: IPayload): Promise<ProfileAccount> {
+    const { accountName, profileId } = payload;
+    const account = (await this.accountRepository.findByAccountName(
+      accountName,
+    )) as ProfileAccount;
+    if (profileId) {
+      const profile = await this.profileRepository.findById(profileId);
+      account.profile = profile;
+    }
     return account;
   }
 

@@ -38,3 +38,6 @@ lerna-debug.log*
 *.env
 *.pem
 *.pre-commit-config.yaml
+
+images
+files

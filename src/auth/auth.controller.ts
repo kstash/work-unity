@@ -15,7 +15,7 @@ import { User } from 'src/user/enitity/user.entity';
 import { GetAccount } from 'src/auth/decorator/get-account.decorator';
 import { SigninDto } from './dto/signin.dto';
 import { Response } from 'express';
-import { AuthGuard } from './auth.guard';
+import { JwtAuthGuard } from './auth.guard';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Company } from 'src/group/entity/company.entity';
 import { SignupCompanyDto } from './dto/signupCompany.dto';
@@ -40,9 +40,9 @@ export class AuthController {
   })
   async signupUser(@Body() dto: SignupDto, @Res() res: Response) {
     const account = await this.authService.signup(dto.user, dto.account);
-    const signupAccountResponse = new SignupAccountResponse(account);
-
-    return res.status(HttpStatus.CREATED).json(signupAccountResponse);
+    return res
+      .status(HttpStatus.CREATED)
+      .json(new SignupAccountResponse(account));
   }
 
   @Post('/signup/company')
@@ -54,7 +54,7 @@ export class AuthController {
     description: '등록한 기업 정보 반환',
     type: Company,
   })
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   async signUpCompany(
     @GetAccount() account: Account,
@@ -68,9 +68,13 @@ export class AuthController {
   @Post('/signin')
   @ApiOperation({ summary: '로그인', description: '계정 정보로 로그인' })
   async signIn(@Body() dto: SigninDto, @Res() res: Response) {
-    const jwt = await this.authService.signIn(dto);
-    res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
-    return res.status(HttpStatus.ACCEPTED).json(jwt);
+    try {
+      const jwt = await this.authService.signIn(dto);
+      res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
+      return res.status(HttpStatus.ACCEPTED).json(jwt);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get('/me')
@@ -79,7 +83,7 @@ export class AuthController {
     description: '내 계정 정보 가져오기',
   })
   @ApiCreatedResponse({ description: '내 계정 정보', type: User })
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   getAccount(@GetAccount() account) {
     const user = this.authService.getUser(account);
     return user;

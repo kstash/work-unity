@@ -3,13 +3,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Account } from './account.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { faker } from '@faker-js/faker';
+import { File } from 'src/resource/entity/file.entity';
 
 export enum Gender {
   MALE = 'male',
@@ -21,6 +24,16 @@ export enum Gender {
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+  // -------------------------------------------------------------------------
+  @ApiProperty({ description: '계정', type: () => Account })
+  @ApiPropertyOptional({
+    description: '대표 이미지',
+    type: () => File,
+    required: false,
+  })
+  @OneToOne(() => File, { nullable: true, eager: true, onDelete: 'SET NULL' })
+  @JoinColumn()
+  image?: File;
   // -------------------------------------------------------------------------
   @ApiProperty({
     description: '전화번호',
@@ -67,6 +80,7 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
   // -------------------------------------------------------------------------
+  @ApiProperty({ description: '비점', type: () => Account })
   @OneToMany(() => Account, (account) => account.user)
-  accounts: Account[];
+  accounts!: Account[];
 }

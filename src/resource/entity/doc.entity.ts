@@ -19,15 +19,15 @@ export class Doc extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   // -------------------------------------------------------------------------
-  @ApiProperty({ description: '문서 생성자', type: () => Profile })
+  @ApiProperty({ description: '프로필', type: () => Profile })
   @ManyToOne(() => Profile, (a) => a.createdDocs)
   profile!: Profile;
   // -------------------------------------------------------------------------
-  @ApiProperty({ description: '문서 제목', example: 'document title' })
+  @ApiProperty({ description: '제목', example: faker.lorem.sentence() })
   @Column()
   title!: string;
   @ApiPropertyOptional({
-    description: '내용글',
+    description: '내용',
     example: faker.lorem.paragraphs(),
     required: false,
   })

@@ -20,21 +20,21 @@ export class Account extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   // -------------------------------------------------------------------------
-  @ApiProperty({ description: '계정 사용자', type: () => User })
+  @ApiProperty({ description: '사용자', type: () => User })
   @ManyToOne(() => User, (u) => u.accounts, { nullable: false })
   user!: User;
   // -------------------------------------------------------------------------
   @ApiProperty({
-    description: '사용자 계정 ID',
+    description: '아이디',
     example: faker.internet.userName(),
   })
   @Column({ unique: true })
   accountName!: string;
   @ApiProperty({
-    description: '사용자 계정 PW',
+    description: '비밀번호',
     example: faker.internet.password(),
   })
-  @Column()
+  @Column({ select: false })
   password!: string;
   // -------------------------------------------------------------------------
   @ApiProperty({
