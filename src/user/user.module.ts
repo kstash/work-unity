@@ -17,6 +17,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
 import { ProfileRepository } from './repository/profile.repository';
 import { Profile } from './enitity/profile.entity';
+import { ResourceModule } from 'src/resource/resource.module';
+import { ResourceService } from 'src/resource/resource.service';
+import { DocRepository } from 'src/resource/repository/doc.repository';
+import { FileRepository } from 'src/resource/repository/file.repository';
 
 @Module({
   imports: [
@@ -30,17 +34,21 @@ import { Profile } from './enitity/profile.entity';
         signOptions: { expiresIn: configService.get<number>('JWT_EXPIRES_IN') },
       }),
     }),
+    ResourceModule,
   ],
   controllers: [UserController],
   providers: [
     AuthService,
     UserService,
+    ResourceService,
     AccountRepository,
     CompanyRepository,
     ProfileRepository,
     LeaveRepository,
     SalaryRepository,
     UserRepository,
+    DocRepository,
+    FileRepository,
   ],
   exports: [UserService],
 })

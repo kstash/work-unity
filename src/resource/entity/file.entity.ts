@@ -3,9 +3,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,10 +17,10 @@ export class File extends BaseEntity {
   id: number;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '파일 업로더', type: () => Profile })
-  @ManyToOne(() => Profile, (profile) => profile.files)
-  profile!: Profile;
+  @ManyToOne(() => Profile, (profile) => profile.files, { nullable: true })
+  profile?: Profile;
+  @ApiPropertyOptional({ description: '연관 문서', type: () => Doc })
   @ManyToOne(() => Doc, (doc) => doc.files, { nullable: true })
-  @JoinColumn({ name: 'docId', referencedColumnName: 'id' })
   doc?: Doc;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '경로', example: faker.system.filePath() })
@@ -34,20 +32,26 @@ export class File extends BaseEntity {
   })
   @Column()
   size!: number;
-  @ApiProperty({ description: '이름', example: faker.system.fileName() })
+  @ApiProperty({
+    description: '관리용 파일명',
+    example: Date.now() + '.' + faker.system.fileExt(),
+  })
   @Column()
   name!: string;
+  @ApiProperty({
+    description: '기존 파일명',
+    example: faker.system.commonFileName(),
+  })
+  @Column()
+  originalname!: string;
   @ApiPropertyOptional({
-    description: '확장자',
+    description: '확장자명',
     example: faker.system.commonFileExt(),
   })
   @Column({ nullable: true })
-  ext!: string;
+  ext?: string;
   // -------------------------------------------------------------------------
-  @ApiProperty({ description: '업로드일자', example: faker.date.past() })
+  @ApiProperty({ description: '생성일자', example: faker.date.past() })
   @CreateDateColumn()
   createdAt: Date;
-  @ApiPropertyOptional({ description: '삭제일자', example: faker.date.past() })
-  @DeleteDateColumn()
-  deletedAt?: Date;
 }

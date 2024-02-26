@@ -1,6 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsStrongPassword } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsStrongPassword,
+  Validate,
+} from 'class-validator';
+import { IsValidProfileId } from 'src/user/validator/profile-id.validator';
 
 export class SigninDto {
   @ApiProperty({
@@ -29,4 +35,12 @@ export class SigninDto {
     },
   )
   password!: string;
+
+  @ApiPropertyOptional({
+    description: '프로필 ID',
+    example: faker.number.int(),
+  })
+  @IsOptional()
+  @Validate(IsValidProfileId)
+  profileId?: number;
 }

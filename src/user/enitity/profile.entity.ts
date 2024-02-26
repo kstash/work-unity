@@ -61,8 +61,6 @@ export class Profile extends BaseEntity {
   @Column({ nullable: true })
   address?: string;
   // -------------------------------------------------------------------------
-  @OneToMany(() => File, (image) => image.profile, { nullable: true })
-  image?: File;
   @OneToMany(() => Doc, (doc) => doc.profile)
   createdDocs: Doc[];
   @OneToMany(() => File, (file) => file.profile)

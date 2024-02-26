@@ -7,4 +7,8 @@ export class FileRepository extends Repository<File> {
   constructor(dataSource: DataSource) {
     super(File, dataSource.createEntityManager());
   }
+
+  findById(id: number) {
+    return this.findOneByOrFail({ id });
+  }
 }

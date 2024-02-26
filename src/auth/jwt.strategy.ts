@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { IPayload } from './interface/payload.interface';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
+import { Account } from 'src/user/enitity/account.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,14 +13,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly configService: ConfigService,
   ) {
     super({
+      secretOrKey: configService.get('JWT_SECRET'),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_SECRET'),
     });
   }
 
-  async validate(payload: IPayload): Promise<any> {
-    const account = await this.authService.tokenValidateAccount(payload);
+  async validate(payload: IPayload): Promise<Account> {
+    const account = await this.authService.tokenValidate(payload);
     return account;
   }
 }
