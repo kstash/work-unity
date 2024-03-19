@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpStatus,
-  Param,
   Post,
   Res,
   UnauthorizedException,

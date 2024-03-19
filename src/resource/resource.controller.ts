@@ -38,14 +38,10 @@ export class ResourceController {
     @Body() dto: CreateDocDto,
     @UploadedFiles() files: { attachments: Express.Multer.File[] },
   ) {
-    const doc = await this.resourceService.createDoc(
-      dto,
-      profileAccount.profile,
-    );
-    const uploadFiles = await this.resourceService.uploadFiles(
-      files.attachments,
-      profileAccount.profile,
-    );
+    const { profile } = profileAccount;
+    const { attachments } = files;
+    await this.resourceService.createDoc(dto, profile);
+    await this.resourceService.uploadFiles(attachments, profile);
     return null;
   }
 
