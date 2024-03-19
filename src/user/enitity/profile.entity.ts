@@ -44,7 +44,10 @@ export class Profile extends BaseEntity {
     type: () => Team,
     required: false,
   })
-  @ManyToOne(() => Team, (team) => team.profiles, { nullable: true })
+  @ManyToOne(() => Team, (team) => team.profiles, {
+    nullable: true,
+    eager: true,
+  })
   team?: Team;
   // -------------------------------------------------------------------------
   @ApiPropertyOptional({ description: '활성 상태', type: Boolean })
