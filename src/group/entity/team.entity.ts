@@ -21,7 +21,7 @@ export class Team extends BaseEntity {
   id: number;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '소속 회사', type: () => Company })
-  @ManyToOne(() => Company, (company) => company.teams)
+  @ManyToOne(() => Company, (company) => company.teams, { nullable: false })
   company: Company;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '팀 이름', example: faker.commerce.department() })

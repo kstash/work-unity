@@ -61,8 +61,8 @@ export class Company extends BaseEntity {
   @Column()
   traderReg!: string;
   // -------------------------------------------------------------------------
-  @OneToMany(() => Profile, (p) => p.company)
+  @OneToMany(() => Profile, (p) => p.company, { eager: false })
   profiles: Profile[];
-  @OneToMany(() => Team, (t) => t.company)
+  @OneToMany(() => Team, (t) => t.company, { eager: true })
   teams: Team[];
 }
