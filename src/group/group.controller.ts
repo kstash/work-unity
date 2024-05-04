@@ -76,7 +76,15 @@ export class GroupController {
       company: account.profile.company,
     };
     const team = await this.groupService.createTeam(createTeamDto);
-    await this.groupService.inviteProfilesToTeam(profileIds, team);
+    try {
+      await Promise.all(
+        profileIds.map((profileId) =>
+          this.groupService.inviteProfileToTeam(profileId, team),
+        ),
+      );
+    } catch (error) {
+      this.groupService.deleteTeam(team.id);
+    }
     return res.status(HttpStatus.CREATED).json(team);
   }
 

@@ -31,21 +31,20 @@ export class GroupService {
     return this.teamRepository.createTeam(createDto);
   }
 
-  async inviteProfilesToTeam(
-    profileIds: number[],
-    team: Team,
-  ): Promise<Profile[]> {
-    // TODO: 작업 완료후 초대 기능이 동작할 수 있도록 수락 기능과 같은 관련 내용 추가
-    const profiles = await this.profileRepository
-      .findBy({ id: In(profileIds) })
-      .then((profiles) => {
-        const updatedProfiles = profiles.map((profile) => {
-          profile.team = team;
-          return this.profileRepository.save(profile);
-        });
-        return Promise.all(updatedProfiles);
-      });
-    return profiles;
+  deleteTeam(teamId: number): Promise<void> {
+    this.teamRepository.delete({ id: teamId });
+    return;
+  }
+
+  async inviteProfileToTeam(profileId: number, team: Team): Promise<Profile> {
+    const profile = await this.profileRepository.findOneByOrFail({
+      id: profileId,
+    });
+    if (profile.team) {
+      throw new Error('Profile is already in a team');
+    }
+    profile.team = team;
+    return this.profileRepository.save(profile);
   }
 
   // 해당 사용자에 대해서 companyId를 가지는 profile을 하나 생성해줍니다.
