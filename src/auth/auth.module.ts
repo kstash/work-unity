@@ -35,6 +35,6 @@ import { ProfileRepository } from 'src/user/repository/profile.repository';
     ProfileRepository,
     UserRepository,
   ],
-  exports: [JwtStrategy, PassportModule],
+  exports: [JwtStrategy, PassportModule, AuthService, JwtModule],
 })
 export class AuthModule {}

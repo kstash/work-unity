@@ -8,6 +8,7 @@ import { Team } from './entity/team.entity';
 import { ProfileRepository } from 'src/user/repository/profile.repository';
 import { In } from 'typeorm';
 import { Profile } from 'src/user/enitity/profile.entity';
+import { Account } from 'src/user/enitity/account.entity';
 
 @Injectable()
 export class GroupService {
@@ -30,7 +31,10 @@ export class GroupService {
     return this.teamRepository.createTeam(createDto);
   }
 
-  async inviteProfiles(profileIds: number[], team: Team): Promise<Profile[]> {
+  async inviteProfilesToTeam(
+    profileIds: number[],
+    team: Team,
+  ): Promise<Profile[]> {
     // TODO: 작업 완료후 초대 기능이 동작할 수 있도록 수락 기능과 같은 관련 내용 추가
     const profiles = await this.profileRepository
       .findBy({ id: In(profileIds) })
@@ -42,5 +46,19 @@ export class GroupService {
         return Promise.all(updatedProfiles);
       });
     return profiles;
+  }
+
+  // 해당 사용자에 대해서 companyId를 가지는 profile을 하나 생성해줍니다.
+  async inviteAccountToCompany(
+    inviterProfile: Profile,
+    inviteeAccount: Account,
+  ): Promise<Profile> {
+    const dto = {
+      account: inviteeAccount,
+      company: inviterProfile.company,
+    };
+    const inviteeProfile = await this.profileRepository.createProfile(dto);
+
+    return inviteeProfile;
   }
 }

@@ -6,13 +6,13 @@ import { Authority } from '../enitity/profile.entity';
 
 export class CreateProfileDto {
   @ApiProperty({ required: true })
-  account: Account;
+  account!: Account;
   @ApiProperty({ required: true })
-  company: Company;
+  company!: Company;
   @ApiPropertyOptional({ required: false })
   team?: Team;
   @ApiPropertyOptional({ required: false })
   address?: string;
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ default: Authority.WORKER })
   type?: Authority;
 }

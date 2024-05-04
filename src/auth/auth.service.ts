@@ -100,6 +100,13 @@ export class AuthService {
     return profileAccount;
   }
 
+  async getAccount(accountId: number): Promise<Account> {
+    const account = await this.accountRepository.findOneByOrFail({
+      id: accountId,
+    });
+    return account;
+  }
+
   async getUser(account: Account): Promise<User> {
     const user = await this.userRepository.findById(account.user.id);
     return user;
