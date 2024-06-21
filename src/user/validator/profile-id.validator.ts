@@ -33,7 +33,7 @@ export class IsValidProfileId implements ValidatorConstraintInterface {
 }
 
 export const IsValidProfile = (validationOptions?: ValidationOptions) => {
-  return (object: Object, propertyName: string) => {
+  return (object: unknown, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName,
