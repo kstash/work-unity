@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsNumberString } from 'class-validator';
+import { IsBoolean, IsNumber } from 'class-validator';
 
 export class ResponseTeamInvitationDto {
   @ApiProperty({

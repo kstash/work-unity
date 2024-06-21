@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CompanyRepository } from './repository/company.repository';
 import { Company } from './entity/company.entity';
@@ -16,7 +11,6 @@ import { Account } from 'src/user/enitity/account.entity';
 import { TeamInvitation } from './entity/team_invitation.entity';
 import { TeamInvitationRepository } from './repository/team-invitation.repository';
 import { CreateTeamInvitationDto } from './dto/create-team-invitation.dto';
-import { CreateProfileDto } from 'src/user/dto/create-profile.dto';
 
 @Injectable()
 export class GroupService {

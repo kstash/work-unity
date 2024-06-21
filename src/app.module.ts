@@ -1,9 +1,4 @@
-import {
-  HttpStatus,
-  Module,
-  UnprocessableEntityException,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
 import { ScheduleModule } from './schedule/schedule.module';
@@ -12,11 +7,10 @@ import { ResourceModule } from './resource/resource.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './logger/logger.module';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { LoggerInterceptor } from './common/interceptor/logger.interceptor';
 import { MyLogger } from './logger/logger.service';
 import { HttpExceptionFilter } from './common/filter/exception.filter';
-import { ValidationError } from 'class-validator';
 
 @Module({
   imports: [

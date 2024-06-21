@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Param,
-  ParseBoolPipe,
   ParseIntPipe,
   Post,
   Put,
@@ -25,7 +24,7 @@ import {
   ProfileAccount,
 } from 'src/auth/interface/profileAccount.interface';
 import { Response } from 'express';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Authority } from 'src/user/enitity/profile.entity';
 import { CreateTeamRequest } from './request/create-team.request';
 import { AuthService } from 'src/auth/auth.service';

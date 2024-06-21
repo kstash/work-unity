@@ -1,15 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsStrongPassword,
-  Validate,
-} from 'class-validator';
-import {
-  IsValidProfile,
-  IsValidProfileId,
-} from 'src/user/validator/profile-id.validator';
+import { IsNotEmpty, IsOptional, IsStrongPassword } from 'class-validator';
+import { IsValidProfile } from 'src/user/validator/profile-id.validator';
 
 export class SigninDto {
   @ApiProperty({
