@@ -6,7 +6,10 @@ import {
   IsStrongPassword,
   Validate,
 } from 'class-validator';
-import { IsValidProfileId } from 'src/user/validator/profile-id.validator';
+import {
+  IsValidProfile,
+  IsValidProfileId,
+} from 'src/user/validator/profile-id.validator';
 
 export class SigninDto {
   @ApiProperty({
@@ -41,6 +44,6 @@ export class SigninDto {
     example: faker.number.int(),
   })
   @IsOptional()
-  @Validate(IsValidProfileId)
+  @IsValidProfile()
   profileId?: number;
 }

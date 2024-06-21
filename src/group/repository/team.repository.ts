@@ -26,4 +26,9 @@ export class TeamRepository extends Repository<Team> {
       }
     }
   }
+
+  async findById(id: number): Promise<Team> {
+    const result = await this.findOneByOrFail({ id });
+    return result;
+  }
 }

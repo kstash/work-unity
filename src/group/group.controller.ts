@@ -2,31 +2,42 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
   HttpStatus,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Post,
+  Put,
+  Query,
   Res,
   UnauthorizedException,
   UseFilters,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateTeamDto } from './dto/create-team.dto';
-import { GroupFilter } from './group.filter';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { GetAccount } from 'src/auth/decorator/get-account.decorator';
-import { ProfileAccount } from 'src/auth/interface/profileAccount.interface';
+import {
+  ManagerAccount,
+  ProfileAccount,
+} from 'src/auth/interface/profileAccount.interface';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Authority } from 'src/user/enitity/profile.entity';
 import { CreateTeamRequest } from './request/create-team.request';
 import { AuthService } from 'src/auth/auth.service';
+import { InviteProfileRequest } from './request/invite-profile.request';
+import { HttpExceptionFilter } from 'src/common/filter/exception.filter';
+import { GetManagerAccount } from 'src/auth/decorator/get-manager-account.decorator';
+import { ResponseTeamInvitationDto } from './dto/response-team-invitation.dto';
 
+@UseFilters(HttpExceptionFilter)
 @UseGuards(JwtAuthGuard)
 @Controller('group')
 @ApiTags('Group API Endpoints for Company and Team')
-@UseFilters(GroupFilter)
 export class GroupController {
   constructor(
     private groupService: GroupService,
@@ -70,22 +81,48 @@ export class GroupController {
     if (account.profile.type !== Authority.MANAGER) {
       throw new UnauthorizedException('Only manager can create a team');
     }
-    const { name, profileIds } = body;
     const createTeamDto: CreateTeamDto = {
-      name,
+      name: body.teamName,
       company: account.profile.company,
     };
     const team = await this.groupService.createTeam(createTeamDto);
-    try {
-      await Promise.all(
-        profileIds.map((profileId) =>
-          this.groupService.inviteProfileToTeam(profileId, team),
-        ),
-      );
-    } catch (error) {
-      this.groupService.deleteTeam(team.id);
-    }
     return res.status(HttpStatus.CREATED).json(team);
+  }
+
+  @Post('/company/team/invite')
+  async inviteProfileToTeam(
+    @GetManagerAccount(ValidationPipe) account: ManagerAccount,
+    @Body(ValidationPipe) body: InviteProfileRequest,
+    @Res() res: Response,
+  ) {
+    try {
+      const { teamId, profileId } = body;
+      const invitation = await this.groupService.createTeamInvitation(
+        teamId,
+        profileId,
+      );
+      return res.status(HttpStatus.CREATED).json(invitation);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Put('/company/team/invite')
+  async responseTeamInvitation(
+    @GetAccount() account: ProfileAccount,
+    @Query() dto: ResponseTeamInvitationDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const { invitationId, acceptance } = dto;
+      const invitation = await this.groupService.responseTeamInvitation(
+        invitationId,
+        acceptance,
+      );
+      return res.status(HttpStatus.ACCEPTED).json(invitation);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   @Post('/company/:accountId')

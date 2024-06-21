@@ -66,15 +66,12 @@ export class AuthController {
   }
 
   @Post('/signin')
+  @UsePipes(ValidationPipe)
   @ApiOperation({ summary: '로그인', description: '계정 정보로 로그인' })
   async signIn(@Body() dto: SigninDto, @Res() res: Response) {
-    try {
-      const jwt = await this.authService.signIn(dto);
-      res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
-      return res.status(HttpStatus.ACCEPTED).json(jwt);
-    } catch (error) {
-      throw error;
-    }
+    const jwt = await this.authService.signIn(dto);
+    res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
+    return res.status(HttpStatus.ACCEPTED).json(jwt);
   }
 
   @Get('/me')

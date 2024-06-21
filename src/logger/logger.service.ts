@@ -8,9 +8,14 @@ export class MyLogger implements LoggerService {
   constructor() {
     this.logger = winston.createLogger({
       level: 'info',
-      format: winston.format.json({ space: 4 }),
+      format: winston.format.json({ space: 2 }),
       transports: [
-        new winston.transports.Console(),
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.simple(),
+          ),
+        }),
         new winston.transports.File({ filename: 'error.log', level: 'error' }),
         new winston.transports.File({ filename: 'combined.log' }),
       ],

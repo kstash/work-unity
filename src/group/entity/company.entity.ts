@@ -63,6 +63,6 @@ export class Company extends BaseEntity {
   // -------------------------------------------------------------------------
   @OneToMany(() => Profile, (p) => p.company, { eager: false })
   profiles: Profile[];
-  @OneToMany(() => Team, (t) => t.company, { eager: true })
+  @OneToMany(() => Team, (t) => t.company, { eager: false })
   teams: Team[];
 }

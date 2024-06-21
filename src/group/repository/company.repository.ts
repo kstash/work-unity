@@ -13,6 +13,11 @@ export class CompanyRepository extends Repository<Company> {
     super(Company, dataSoruce.createEntityManager());
   }
 
+  async findById(id: number): Promise<Company> {
+    const result = await this.findOneByOrFail({ id });
+    return result;
+  }
+
   async createCompany(createDto: CreateCompanyDto): Promise<any> {
     try {
       const company = this.create(createDto);

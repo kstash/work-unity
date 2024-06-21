@@ -12,6 +12,7 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyRepository } from 'src/group/repository/company.repository';
 import { ProfileRepository } from 'src/user/repository/profile.repository';
+import { HttpExceptionFilter } from 'src/common/filter/exception.filter';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ProfileRepository } from 'src/user/repository/profile.repository';
   ],
   controllers: [AuthController],
   providers: [
+    HttpExceptionFilter,
     JwtStrategy,
     AuthService,
     AccountRepository,

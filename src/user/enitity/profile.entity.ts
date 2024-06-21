@@ -18,6 +18,7 @@ import { Event } from 'src/schedule/entity/event.entity';
 import { Approval } from 'src/schedule/entity/approval.entity';
 import { Salary } from './salary.entity';
 import { Doc } from 'src/resource/entity/doc.entity';
+import { TeamInvitation } from 'src/group/entity/team_invitation.entity';
 
 export enum Authority {
   WORKER = 'worker',
@@ -79,4 +80,6 @@ export class Profile extends BaseEntity {
   events: Event[];
   @OneToMany(() => Approval, (approval) => approval.profile)
   approvals: Approval[];
+  @OneToMany(() => TeamInvitation, (invitation) => invitation.profile)
+  invitations: TeamInvitation[];
 }

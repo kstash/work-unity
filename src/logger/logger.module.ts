@@ -16,7 +16,7 @@ import * as winstonDaily from 'winston-daily-rotate-file';
         new winston.transports.Console({
           level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
           format: winston.format.combine(
-            winston.format.timestamp(),
+            winston.format.simple(),
             nestWinstonModuleUtilities.format.nestLike(process.env.APP_NAME, {
               prettyPrint: true,
             }),

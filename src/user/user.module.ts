@@ -21,6 +21,8 @@ import { ResourceModule } from 'src/resource/resource.module';
 import { ResourceService } from 'src/resource/resource.service';
 import { DocRepository } from 'src/resource/repository/doc.repository';
 import { FileRepository } from 'src/resource/repository/file.repository';
+import { IsValidProfileId } from './validator/profile-id.validator';
+import { MyLogger } from 'src/logger/logger.service';
 
 @Module({
   imports: [
@@ -49,7 +51,9 @@ import { FileRepository } from 'src/resource/repository/file.repository';
     UserRepository,
     DocRepository,
     FileRepository,
+    IsValidProfileId,
+    MyLogger,
   ],
-  exports: [UserService],
+  exports: [UserService, IsValidProfileId],
 })
 export class UserModule {}

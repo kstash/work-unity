@@ -13,6 +13,7 @@ import { Company } from './company.entity';
 import { Profile } from 'src/user/enitity/profile.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { faker } from '@faker-js/faker';
+import { TeamInvitation } from './team_invitation.entity';
 
 @Entity('team')
 @Unique('create_team_restraint', ['company', 'name'])
@@ -21,7 +22,10 @@ export class Team extends BaseEntity {
   id: number;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '소속 회사', type: () => Company })
-  @ManyToOne(() => Company, (company) => company.teams, { nullable: false })
+  @ManyToOne(() => Company, (company) => company.teams, {
+    nullable: false,
+    eager: true,
+  })
   company: Company;
   // -------------------------------------------------------------------------
   @ApiProperty({ description: '팀 이름', example: faker.commerce.department() })
@@ -40,4 +44,6 @@ export class Team extends BaseEntity {
   // -------------------------------------------------------------------------
   @OneToMany(() => Profile, (profile) => profile.team)
   profiles: Profile[];
+  @OneToMany(() => TeamInvitation, (invitation) => invitation.team)
+  invitations: TeamInvitation[];
 }
